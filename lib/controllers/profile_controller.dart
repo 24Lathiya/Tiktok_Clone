@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_clone/helper/user_preference.dart';
-import 'package:tiktok_clone/models/follower_model.dart';
-import 'package:tiktok_clone/models/following_model.dart';
 import 'package:tiktok_clone/models/user_model.dart';
 import 'package:tiktok_clone/models/video_model.dart';
 
@@ -50,12 +48,12 @@ class ProfileController extends GetxController{
     _followerList = [];
     var snapshot = await FirebaseFirestore.instance.collection('users').doc(userId).collection('followers').get();
    if(snapshot.docs.isNotEmpty){
-     snapshot.docs.forEach((snap) {
+     for (var snap in snapshot.docs) {
        if (snap.get('uid') == FirebaseAuth.instance.currentUser!.uid) {
          _isFollowed = true;
        }
          _followerList.add(UserModel.fromJson(snap));
-     });
+     }
    }
   _isLoaded = true;
    update();
@@ -68,9 +66,9 @@ class ProfileController extends GetxController{
     _followingList = [];
     var snapshot = await FirebaseFirestore.instance.collection('users').doc(userId).collection('followings').get();
     if(snapshot.docs.isNotEmpty) {
-      snapshot.docs.forEach((snap) {
+      for (var snap in snapshot.docs) {
         _followingList.add(UserModel.fromJson(snap));
-      });
+      }
     }
     _isLoaded = true;
     update();

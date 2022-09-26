@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/controllers/search_controller.dart';
-import 'package:tiktok_clone/views/screens/home/profile_page.dart';
 import 'package:tiktok_clone/views/screens/user_page.dart';
-import 'package:tiktok_clone/views/widgets/text_input_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import 'package:get/get.dart';
@@ -17,16 +15,15 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   SearchController searchController = Get.put(SearchController());
   var searchEditingController = TextEditingController();
-  var isEmpty;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Search"),),
+      appBar: AppBar(title: const Text("Search"),),
       body: SafeArea(
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
+            padding: const EdgeInsets.only(left: 15, right: 15),
             child: TextField(
               showCursor: true,
               controller: searchEditingController,
@@ -37,15 +34,10 @@ class _SearchPageState extends State<SearchPage> {
                     onTap: () {
                       searchController.searchUser(searchEditingController.text.trim());
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.search,
                     ),
-                  )),
-              onChanged: (value) {
-                setState(() {
-                  isEmpty = value.isEmpty;
-                });
-              },
+                  ),),
             ),
           ),
           GetBuilder<SearchController>(builder: (controller){

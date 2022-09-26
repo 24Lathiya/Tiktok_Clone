@@ -23,7 +23,7 @@ class TextInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         TextField(

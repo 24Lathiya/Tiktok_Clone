@@ -1,15 +1,9 @@
-import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:tiktok_clone/controllers/auth_controller.dart';
 import 'package:tiktok_clone/controllers/video_controller.dart';
-import 'package:tiktok_clone/helper/user_preference.dart';
-import 'package:tiktok_clone/helper/utils.dart';
 import 'package:tiktok_clone/models/user_model.dart';
-import 'package:tiktok_clone/views/screens/auth/login_page.dart';
 import 'package:tiktok_clone/views/screens/comment_page.dart';
 import 'package:tiktok_clone/views/screens/home/widgets/icon_text_widget.dart';
 import 'package:tiktok_clone/views/screens/home/widgets/reels_video_player.dart';
@@ -24,19 +18,19 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  VideoController videoController = Get.put(VideoController());
-
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
+  // VideoController videoController = Get.put(VideoController());
+  bool isHome = true;
   @override
   void initState() {
     // TODO: implement initState
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky); // remove status bar
-    _loadVideos();
+    // _loadVideos();
     super.initState();
   }
-  Future _loadVideos() async{
-    await videoController.getVideoList();
-  }
+  // Future _loadVideos() async{
+  //   await videoController.getVideoList();
+  // }
 
 
   @override
@@ -63,46 +57,54 @@ class _HomePageState extends State<HomePage> {
                     ),
                     color: Vx.randomColor,
                   ),*/
-                  ReelsVideoPlayer(thumbUrl: videoModel.videoThumb, videoUrl: videoModel.videoUrl),
+                  ReelsVideoPlayer(thumbUrl: videoModel.videoThumb, videoUrl: videoModel.videoUrl, isHome: isHome),
                   Positioned(
                     right: 0,
                     bottom: 80,
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Stack(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage("${videoModel.userProfile}"),
-                               // child: Image(image: NetworkImage("${videoModel.userProfile}")) ,
-                                radius: 25,
-                              ),
+                    child: Column(
+                      children: [
+                        Stack(children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(videoModel.userProfile),
+                             // child: Image(image: NetworkImage("${videoModel.userProfile}")) ,
+                              radius: 25,
                             ),
-                            Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              child: Icon(
-                                Icons.add_circle,
-                                color: Colors.red,
-                              ),
-                            )
-                          ]
-                          ).onTap(() {
-                            UserModel userModel  = UserModel(uid: videoModel.userId, name: videoModel.userName, email: videoModel.userEmail, profile: videoModel.userProfile);
-                            Get.to(UserPage(userModel: userModel));
-                          }),
-                          Column(children: [const SizedBox(height: 20,), Icon(Icons.favorite, size: 30, color: videoModel.videoLiker.contains(FirebaseAuth.instance.currentUser!.uid) ? Colors.red : Colors.white, shadows: [BoxShadow(color: Colors.black, blurRadius: 2)],).onTap(() {
-                            videoController.likeUnlikeVideo(videoModel);
-                          }), const SizedBox(height: 10,), "${videoModel.videoLiker.length}".text.xl.shadow(1, 1, 1, Colors.black).make()],),
-                          // IconTextWidget(icon: Icons.favorite, count: "${videoModel.videoLiker.length}"),
-                          IconTextWidget(icon: Icons.message, count: "${videoModel.commentCount}").onTap(() {
-                            Get.to(CommentPage(videoModel: videoModel,));
-                          }),
-                          IconTextWidget(icon: Icons.share, count: "${videoModel.shareCount}"),
-                        ],
-                      ),
+                          ),
+                          const Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Icon(
+                              Icons.add_circle,
+                              color: Colors.red,
+                            ),
+                          )
+                        ]
+                        ).onTap(() async{
+                          isHome = false;
+                          setState(() {});
+                          UserModel userModel  = UserModel(uid: videoModel.userId, name: videoModel.userName, email: videoModel.userEmail, profile: videoModel.userProfile);
+                          Get.to(UserPage(userModel: userModel))!.then((value) {
+                            isHome = true;
+                          setState(() {});
+                          });
+                        }),
+                        Column(children: [const SizedBox(height: 20,), Icon(Icons.favorite, size: 30, color: videoModel.videoLiker.contains(FirebaseAuth.instance.currentUser!.uid) ? Colors.red : Colors.white, shadows: const [BoxShadow(color: Colors.black, blurRadius: 2)],).onTap(() {
+                          videoController.likeUnlikeVideo(videoModel);
+                        }), const SizedBox(height: 10,), "${videoModel.videoLiker.length}".text.xl.shadow(1, 1, 1, Colors.black).make()],),
+                        // IconTextWidget(icon: Icons.favorite, count: "${videoModel.videoLiker.length}"),
+                        IconTextWidget(icon: Icons.message, count: "${videoModel.commentCount}").onTap(() async{
+                          isHome = false;
+                          setState(() {});
+                          Get.to(CommentPage(videoModel: videoModel,))?.then((value) {
+                            isHome = true;
+                            setState(() {});
+                          });
+                        }),
+                        IconTextWidget(icon: Icons.share, count: "${videoModel.shareCount}"),
+                      ],
                     ),
                   ),
                   Positioned(
@@ -116,20 +118,20 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              "${videoModel.userName}".text.bold.xl.shadow(1, 1, 1, Colors.black).make(),
-                              "${videoModel.videoCaption}".text.shadow(1, 1, 1, Colors.black).make(),
-                              "${videoModel.videoSong}".text.shadow(1, 1, 1, Colors.black).make(),
+                              videoModel.userName.text.bold.xl.shadow(1, 1, 1, Colors.black).make(),
+                              videoModel.videoCaption.text.shadow(1, 1, 1, Colors.black).make(),
+                              videoModel.videoSong.text.shadow(1, 1, 1, Colors.black).make(),
                             ],),
                           Container(
                             width: 50,
                             height: 50,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.black,
                               shape: BoxShape.circle,
                               boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 0.5)],
                             ),
 
-                            child: Icon(Icons.music_note_rounded),
+                            child: const Icon(Icons.music_note_rounded),
                           ),
                           /*CircleAvatar(
                             child: Icon(Icons.music_note_rounded,),
@@ -138,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ))
                 ]);
-              }) : Center(child: CircularProgressIndicator());
+              }) : const Center(child: CircularProgressIndicator());
         }));
   }
 }

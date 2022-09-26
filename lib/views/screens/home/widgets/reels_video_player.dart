@@ -5,20 +5,21 @@ import 'package:cached_video_player/cached_video_player.dart';
 class ReelsVideoPlayer extends StatefulWidget {
   final String thumbUrl;
   final String videoUrl;
+  final bool isHome;
   const ReelsVideoPlayer(
-      {Key? key, required this.thumbUrl, required this.videoUrl})
+      {Key? key, required this.thumbUrl, required this.videoUrl, required this.isHome})
       : super(key: key);
 
   @override
   State<ReelsVideoPlayer> createState() => _ReelsVideoPlayerState();
 }
 
-class _ReelsVideoPlayerState extends State<ReelsVideoPlayer> with WidgetsBindingObserver{
+class _ReelsVideoPlayerState extends State<ReelsVideoPlayer> {
   late CachedVideoPlayerController _controller;
   @override
   void initState() {
     // TODO: implement initState
-    WidgetsBinding.instance.addObserver(this);
+
     super.initState();
     // print("===url ${widget.videoUrl}");
     _controller = CachedVideoPlayerController.network(widget.videoUrl);
@@ -31,54 +32,28 @@ class _ReelsVideoPlayerState extends State<ReelsVideoPlayer> with WidgetsBinding
     });
     _controller.setLooping(true);
     _controller.play();
+
+  }
+
+  @override
+  void didUpdateWidget(covariant ReelsVideoPlayer oldWidget) { // this will trigger on change state in parent
+    // TODO: implement didUpdateWidget
+    widget.isHome ? _controller.play() : _controller.pause();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    setState(() {
-      switch(state) {
-        case AppLifecycleState.resumed:
-          print("====== resumed");
-         if(_controller.value.isInitialized){
-           _controller.play();
-         }
-        // Handle this case
-          break;
-        case AppLifecycleState.inactive:
-          print("====== inactive");
-        // Handle this case
-          break;
-        case AppLifecycleState.paused:
-          print("====== paused");
-          if(_controller.value.isInitialized){
-            _controller.pause();
-          }
-        // Handle this case
-          break;
-        case AppLifecycleState.detached:
-          print("====== detached");
-        // Handle this case
-          break;
-      }
-    });
-    super.didChangeAppLifecycleState(state);
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: _controller.value.isInitialized
-            ? _controller.value.isBuffering ? Center(child: CircularProgressIndicator()) :Center(
+            ? _controller.value.isBuffering ? const Center(child: CircularProgressIndicator()) :Center(
           child: AspectRatio(
             aspectRatio: _controller.value.aspectRatio,
              child: CachedVideoPlayer(_controller),

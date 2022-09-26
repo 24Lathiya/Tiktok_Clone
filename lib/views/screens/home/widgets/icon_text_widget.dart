@@ -9,6 +9,6 @@ class IconTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [const SizedBox(height: 20,), Icon(icon, size: 30, color: color, shadows: [BoxShadow(color: Colors.black, blurRadius: 2)],), const SizedBox(height: 10,), count.text.xl.shadow(1, 1, 1, Colors.black).make()],);
+    return Column(children: [const SizedBox(height: 20,), Icon(icon, size: 30, color: color, shadows: const [BoxShadow(color: Colors.black, blurRadius: 2)],), const SizedBox(height: 10,), count.text.xl.shadow(1, 1, 1, Colors.black).make()],);
   }
 }

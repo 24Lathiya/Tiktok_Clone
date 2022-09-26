@@ -14,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   UserPreference.preferences = await SharedPreferences.getInstance();
   await Firebase.initializeApp().then((value) => Get.put(AuthController()));
+  Get.put(VideoController());
   runApp(const MyApp());
 }
 
@@ -29,13 +30,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // TODO: implement initState
-   // _loadVideoData();
+    _loadVideoData();
     super.initState();
   }
 
-  // Future _loadVideoData() async{
-  //   await Get.find<VideoController>().getVideoList();
-  // }
+  Future _loadVideoData() async{
+    await Get.find<VideoController>().getVideoList();
+  }
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

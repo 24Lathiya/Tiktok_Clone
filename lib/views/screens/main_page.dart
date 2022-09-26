@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:tiktok_clone/controllers/auth_controller.dart';
-import 'package:tiktok_clone/helper/user_preference.dart';
-import 'package:tiktok_clone/helper/utils.dart';
-import 'package:tiktok_clone/views/screens/auth/login_page.dart';
 import 'package:tiktok_clone/views/screens/home/video_page.dart';
 import 'package:tiktok_clone/views/screens/home/home_page.dart';
 import 'package:tiktok_clone/views/screens/home/message_page.dart';
 import 'package:tiktok_clone/views/screens/home/profile_page.dart';
 import 'package:tiktok_clone/views/screens/home/search_page.dart';
 import 'package:tiktok_clone/views/screens/home/widgets/custom_icon.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -28,11 +22,11 @@ class _MainPageState extends State<MainPage> {
   }
 
   var pages = [
-    HomePage(),
-    SearchPage(),
-    VideoPage(),
-    MessagePage(),
-    ProfilePage(),
+    const HomePage(),
+    const SearchPage(),
+    const VideoPage(),
+    const MessagePage(),
+    const ProfilePage(),
   ];
 
   @override
@@ -47,7 +41,7 @@ class _MainPageState extends State<MainPage> {
           // showUnselectedLabels: false,
           selectedItemColor: Colors.red,
           unselectedItemColor: Colors.white,
-          items: [
+          items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
             BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
             BottomNavigationBarItem(icon: CustomIcon(), label: ""),

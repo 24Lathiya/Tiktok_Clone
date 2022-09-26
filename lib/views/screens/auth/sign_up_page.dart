@@ -47,17 +47,17 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               Stack(children: [
                 CircleAvatar(
+                  radius: 50,
                   child: imagePath == null
-                      ? Image(
+                      ? const Image(
                           image: AssetImage("assets/images/downloads.png"),
                         )
                       : Image.file(File(imagePath)),
-                  radius: 50,
                 ),
                 Positioned(
                     bottom: 5,
                     right: 5,
-                    child: Icon(Icons.camera_alt_rounded).onTap(() {
+                    child: const Icon(Icons.camera_alt_rounded).onTap(() {
                       _getImageFromGallery();
                     }))
               ]),
@@ -91,7 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         EasyLoading.dismiss();
                         if (value == true) {
                           Utils.showCustomSnack("Register Successfully", title: "Success", isError: false);
-                          Get.off(LoginPage());
+                          Get.off(const LoginPage());
                         } else {
                           Utils.showCustomSnack(value);
                         }
@@ -106,7 +106,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   "Already have account?".text.make(),
                   "Login".text.bold.underline.red500.make().p4().onTap(() {
-                    Get.off(LoginPage());
+                    Get.off(const LoginPage());
                   })
                 ],
               )

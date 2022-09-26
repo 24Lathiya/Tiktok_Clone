@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_clone/controllers/profile_controller.dart';
-import 'package:tiktok_clone/models/user_model.dart';
 import 'package:tiktok_clone/views/screens/user_page.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -35,7 +34,7 @@ class _FollowingsPageState extends State<FollowingsPage> {
                   Get.to(UserPage(userModel: controller.followingList[index]));
                 },
               );
-            }): const Center(child: Text("No following found"),) : Center(child: CircularProgressIndicator(),);
+            }): const Center(child: Text("No following found"),) : const Center(child: CircularProgressIndicator(),);
       }),);
   }
 }

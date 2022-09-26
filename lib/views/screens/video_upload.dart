@@ -18,8 +18,8 @@ class VideoUpload extends StatefulWidget {
 }
 
 class _VideoUploadState extends State<VideoUpload> {
-  var _songController = TextEditingController();
-  var _captionController = TextEditingController();
+  final _songController = TextEditingController();
+  final _captionController = TextEditingController();
   late VideoPlayerController _controller;
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _VideoUploadState extends State<VideoUpload> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text("Upload Video"),),
+        appBar: AppBar(title: const Text("Upload Video"),),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -82,7 +82,6 @@ class _VideoUploadState extends State<VideoUpload> {
         ),
         bottomNavigationBar: MaterialButton(
             minWidth: Get.width,
-            child: "Upload".text.bold.xl.make(),
             color: Colors.red,
             onPressed: (){
               if(_songController.text.isEmpty){
@@ -102,7 +101,8 @@ class _VideoUploadState extends State<VideoUpload> {
                 });
               }
 
-            }),
+            },
+            child: "Upload".text.bold.xl.make()),
       ),
     );
   }

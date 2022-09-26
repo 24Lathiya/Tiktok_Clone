@@ -1,12 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:tiktok_clone/controllers/auth_controller.dart';
 import 'package:tiktok_clone/controllers/profile_controller.dart';
-import 'package:tiktok_clone/helper/user_preference.dart';
-import 'package:tiktok_clone/helper/utils.dart';
 import 'package:tiktok_clone/models/user_model.dart';
-import 'package:tiktok_clone/views/screens/auth/login_page.dart';
 import 'package:tiktok_clone/views/screens/followers_page.dart';
 import 'package:tiktok_clone/views/screens/followings_page.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -37,20 +32,20 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.userModel.name), actions: [
-        IconButton(onPressed: (){}, icon: Icon(Icons.more_horiz))
+        IconButton(onPressed: (){}, icon: const Icon(Icons.more_horiz))
       ],),
       body: GetBuilder<ProfileController>(builder: (controller){
         likes = 0;
-        controller.videoList.forEach((video) {
+        for (var video in controller.videoList) {
           likes = likes + video.videoLiker.length;
-        });
+        }
         // print("===likes=== $likes");
-        return Container(
+        return SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               CircleAvatar(backgroundImage: NetworkImage(widget.userModel.profile), radius: 40,),
@@ -70,7 +65,7 @@ class _UserPageState extends State<UserPage> {
                   ).onTap(() {
                     Get.to(FollowersPage(userId: widget.userModel.uid));
                   }),
-                  SizedBox(width: 20,),
+                  const SizedBox(width: 20,),
                   Column(
                     children: [
                       "${controller.followingCount}".text.xl.bold.make(),
@@ -79,7 +74,7 @@ class _UserPageState extends State<UserPage> {
                   ).onTap(() {
                     Get.to(FollowingsPage(userId: widget.userModel.uid));
                   }),
-                  SizedBox(width: 20,),
+                  const SizedBox(width: 20,),
           Column(
                       children: [
                         "$likes".text.xl.bold.make(),
@@ -88,20 +83,20 @@ class _UserPageState extends State<UserPage> {
                     ),
 
                 ],),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Divider(color: Colors.grey,),
+              const Divider(color: Colors.grey,),
               Expanded(
-                child:  controller.isLoaded ? controller.videoList.length > 0 ? GridView.builder(
+                child:  controller.isLoaded ? controller.videoList.isNotEmpty ? GridView.builder(
                       itemCount: controller.videoList.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,), itemBuilder: (context, index){
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,), itemBuilder: (context, index){
                     return Container(decoration: BoxDecoration(
                       color: Vx.randomColor,
                     ),
                       child: Image(image: NetworkImage(controller.videoList[index].videoThumb),),
                     );
-                  }): Center(child: "data not found".text.xl.make(),)  : Center(child: CircularProgressIndicator(),),
+                  }): Center(child: "data not found".text.xl.make(),)  : const Center(child: CircularProgressIndicator(),),
               ),
             ],
           ),

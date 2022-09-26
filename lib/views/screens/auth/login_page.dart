@@ -8,10 +8,18 @@ import 'package:tiktok_clone/views/screens/main_page.dart';
 import 'package:tiktok_clone/views/widgets/text_input_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+ const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   var emailController = TextEditingController();
+
   var passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +60,7 @@ class LoginPage extends StatelessWidget {
                         EasyLoading.dismiss();
                         if (value == true) {
                           Utils.showCustomSnack("Login Successfully", title: "Success", isError: false);
-                          Get.off(MainPage());
+                          Get.off(const MainPage());
                         } else {
                           Utils.showCustomSnack(value);
                         }
@@ -67,7 +75,7 @@ class LoginPage extends StatelessWidget {
                 children: [
                   "Don't have account?".text.make(),
                   "Sign Up".text.bold.underline.red500.make().p4().onTap(() {
-                    Get.off(SignUpPage());
+                    Get.off(const SignUpPage());
                   })
                 ],
               )

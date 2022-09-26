@@ -36,7 +36,7 @@ class _CommentPageState extends State<CommentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Comments"),),
-      body: Container(
+      body: SizedBox(
         width: Get.width,
         height: Get.height,
         child: Column(
@@ -56,7 +56,7 @@ class _CommentPageState extends State<CommentPage> {
                         title: Row(
                           children: [
                             commentModel.username.text.bold.xl.red500.make(),
-                            SizedBox(width: 10,),
+                            const SizedBox(width: 10,),
                             commentModel.comment.text.xl.make(),
                           ],
                         ),
@@ -64,7 +64,7 @@ class _CommentPageState extends State<CommentPage> {
                           children: [
 
                             timeago.format( commentModel.datePublished.toString().contains("Timestamp") ? commentModel.datePublished.toDate() : commentModel.datePublished).text.make(),
-                            SizedBox(width: 10,),
+                            const SizedBox(width: 10,),
                             "${commentModel.likes.length} likes".text.make(),
                           ],
                         ),
@@ -72,10 +72,10 @@ class _CommentPageState extends State<CommentPage> {
                           commentController.likeUnlikeComments(commentModel, widget.videoModel.videoId);
                         }),
                       );
-                    }) : Center(child: CircularProgressIndicator(),);
+                    }) : const Center(child: CircularProgressIndicator(),);
               },),
             ),
-            Container(
+            SizedBox(
               height: 110,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
